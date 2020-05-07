@@ -4,9 +4,9 @@ import BurgerIngredient from './BurgerIngredients/BurgerIngredient';
 import './Burger.css'
 
 const burger = (props)  => {
-
     let ingredients = Object.keys(props.ingredients)
     .map(key =>{
+        props.ingredients[key] = props.ingredients[key] < 0 ? 0 : props.ingredients[key];
         return [...Array(props.ingredients[key])].map((index,value) => {
             return <BurgerIngredient key={key+value} type={key}/>;
         })

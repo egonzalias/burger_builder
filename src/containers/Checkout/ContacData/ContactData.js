@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import Button from '../../../components/UI/Button/Button'
 import axios from '../../../net/axio-orders'
@@ -62,7 +63,8 @@ class ContactData extends Component {
                 },
                 value: '',
                 validation:{
-                    isRequired: false
+                    isRequired: false,
+                    isEmail: true
                 },
                 valid: false,
                 touched: false
@@ -84,8 +86,8 @@ class ContactData extends Component {
         
         this.setState({ loading: true });
         const order = {
-            ingredients: this.props.ingredients,
-            price: this.props.totalPrice,
+            ingredients: this.props.ings,
+            price: this.props.price,
             customer: customerData,
             observations: ''
         }
@@ -116,6 +118,12 @@ class ContactData extends Component {
         if(rules.maxLength){
             isValid = value.length <= rules.maxLength && isValid;
         }
+
+        if (rules.isEmail) {
+            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+            isValid = pattern.test(value) && isValid
+        }
+
         return isValid;
     }
         
@@ -173,4 +181,11 @@ class ContactData extends Component {
     }
 }
 
-export default withRouter(ContactData);
+const mapStateToProps = state => {
+    return{
+        ings: state.ingredients,
+        price: state.totalPrice
+    }
+}
+
+export default connect(mapStateToProps) (withRouter(ContactData));
