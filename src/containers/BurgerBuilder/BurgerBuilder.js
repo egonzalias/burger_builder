@@ -9,7 +9,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import axios from '../../net/axio-orders'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import withErrorHandler from '../../hoc/withErrorHandler'
-import * as actionsType from '../../store/actions'
+import * as burgerBuilderActions from '../../store/actions/index'
 
 
 class BurgerBuilder extends Component {
@@ -17,8 +17,7 @@ class BurgerBuilder extends Component {
     state = {
         purchasable: false,
         purchasing: false,
-        loading: false,
-        error: false
+        loading: false
     }
 
     updatePurchaseState = (ingredients) => {
@@ -45,18 +44,13 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount() {
-        /*axios.get('ingredients.json')
-        .then(response => {
-            this.setState({ingredients: response.data});
-        })
-        .catch(error => {
-            this.setState({error: true});
-        })*/
+        /**/
+        this.props.onIngredientsInit();
     }
 
     render() {
         let orderSummary = null;
-        let burger = this.state.error ? <p>Ingredients can't be load. Please refresh the page</p> : <Spinner />;
+        let burger = this.props.error ? <p>Ingredients can't be load. Please refresh the page</p> : <Spinner />;
 
         if (this.props.ings) {
             burger = (
@@ -96,14 +90,16 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return {
         ings: state.ingredients,
-        price: state.totalPrice
+        price: state.totalPrice,
+        error: state.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (igName) => dispatch({ type: actionsType.ADD_INGREDIENT, ingredientName: igName }),
-        onIngredientRemoved: (igName) => dispatch({ type: actionsType.REMOVE_INGREDIENT, ingredientName: igName })
+        onIngredientAdded: (igName) => dispatch(burgerBuilderActions.addIngredient(igName)),
+        onIngredientRemoved: (igName) => dispatch(burgerBuilderActions.removeIngredient(igName)),
+        onIngredientsInit: () => dispatch(burgerBuilderActions.initIngredients())
     }
 }
 
