@@ -5,5 +5,7 @@ export {
 } from './burgerBuilder'
 
 export {
-
+    purchaseInit,
+    sendPurchaseOrder,
+    fetchOrders
 } from './order'
