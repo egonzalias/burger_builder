@@ -31,7 +31,7 @@ export const setInitIngredientsError = () => {
 }
 
 export const initIngredients = () => {
-    return dispatch => {
+    return (dispatch) => {
         axios.get('ingredients.json')
         .then(response => {
             dispatch(setInitIngredients(response.data));
