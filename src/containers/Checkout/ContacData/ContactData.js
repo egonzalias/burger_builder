@@ -7,6 +7,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner'
 import Input from '../../../components/UI/Input/Input'
 import * as actions from '../../../store/actions/index'
 import  withErrorHandler  from '../../../hoc/withErrorHandler'
+import { checkValidity } from '../../../utility/utility'
 import './ContactData.css'
 
 class ContactData extends Component {
@@ -93,29 +94,11 @@ class ContactData extends Component {
         this.props.onSenderPurchaseOrder(order);
     }
 
-    checkValidity = (value, rules) => {
-        let isValid = true;
-        if (rules.isRequired) {
-            isValid = value.trim() !== '' && isValid;
-        }
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-        if (rules.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid
-        }
-        return isValid;
-    }
-
     inputChangedHandler = (event, id) => {
         const updatedOrderForm = { ...this.state.orderForm };
         const elementForm = { ...updatedOrderForm[id] };
         elementForm.value = event.target.value;
-        elementForm.valid = this.checkValidity(elementForm.value, elementForm.validation);
+        elementForm.valid = checkValidity(elementForm.value, elementForm.validation);
         elementForm.touched = true;
         updatedOrderForm[id] = elementForm;
         let formIsValid = true;

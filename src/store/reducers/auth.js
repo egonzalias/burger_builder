@@ -39,7 +39,8 @@ const reducer = (state = initialState, action) => {
                 error: action.error,
                 token: null,
                 userId: null,
-                email: null
+                email: null,
+                authRedirectPath: '/'
             }
         case actionTypes.AUTH_SET_REDIRECT_PATH:
             return{

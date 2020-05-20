@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import './Auth.css'
 import Button from "../../components/UI/Button/Button";
 import Input from "../../components/UI/Input/Input";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import * as actions from '../../store/actions/index'
 import { Redirect } from 'react-router-dom';
+import { checkValidity } from '../../utility/utility'
+import './Auth.css'
 
 class Auth extends Component {
 
@@ -50,29 +51,11 @@ class Auth extends Component {
         
     }
 
-    checkValidity = (value, rules) => {
-        let isValid = true;
-        if (rules.isRequired) {
-            isValid = value.trim() !== '' && isValid;
-        }
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-        if (rules.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid
-        }
-        return isValid;
-    }
-
     inputChangedHandler = (event, controlName) => {
         const updatedForm = { ...this.state.controls };
         const elementForm = { ...updatedForm[controlName] };
         elementForm.value = event.target.value;
-        elementForm.valid = this.checkValidity(elementForm.value, elementForm.validation);
+        elementForm.valid = checkValidity(elementForm.value, elementForm.validation);
         elementForm.touched = true;
         updatedForm[controlName] = elementForm;
         let formIsValid = true;
@@ -123,9 +106,7 @@ class Auth extends Component {
         }
 
         let authRedirect = null;
-        console.log('estado auth '+this.props.isAuth);
         if(this.props.isAuth){
-            console.log('redireccionando...'+this.props.authRedirectPath);
             authRedirect = <Redirect to={this.props.authRedirectPath}/>
         }
 
