@@ -87,7 +87,7 @@ class Auth extends Component {
         let errorMessage = null;
         if (this.props.error) {
             //this.props.error.code
-            errorMessage = <p>{this.props.error.message}</p>
+            errorMessage = <p>{this.props.error}</p>
         }
 
         let form = elementArray.map(item => (
